@@ -5,7 +5,8 @@
 
 #define ARR_SIZE 100
 #define RANDOM_MIN 0
-#define RANDOM_MAX 900
+// Needs to be 901 higher to be able to generate 900
+#define RANDOM_MAX 901
 
 void printArr(int * arr) {
     // Prints out every number
@@ -17,7 +18,7 @@ void printArr(int * arr) {
             printf("\n");
         }
 
-        printf("%d ", arr[i]);
+        printf("%3d ", arr[i]);
     }
 
     printf("\n=============================================\n");
@@ -83,20 +84,17 @@ int arrayInfo(int * arr) {
 
     }
 
-    int summa = 0;
+    float summa = 0;
     float medel;
 
     for (int i = 0; i < ARR_SIZE; i++) {
-        summa += arr[i];
+        summa += (float)arr[i];
     }
-
-    medel = summa/ARR_SIZE;
-
-    // Array needs to be sorted for you to be able to calculate, this is done as a a security mesure in case the array is not sorted before
-    bubbleSort(arr);
+    // går inte dela int på int så att det blir en float/double
+    medel = summa/(float)ARR_SIZE;
 
                 // index 50 and 49
-    float median = (arr[ARR_SIZE/2] + arr[ARR_SIZE/2 -1]) / 2;
+    float median = (float)(arr[ARR_SIZE/2] + arr[ARR_SIZE/2 -1]) / 2;
 
     printf("Max: %d\nMin: %d\nMedelvärde: %f\nMedian: %f\n", max, min, medel, median);
 
@@ -139,6 +137,9 @@ int binarySearch(int * arr, int num) {
 
 int main() {
 
+    bool createdArray = false;
+    bool sortedArray = false;
+
     // Use current time as 
     // seed for random generator 
     srand(time(0)); 
@@ -164,18 +165,25 @@ int main() {
 
         case '1':
             generateArr(arr);
+            createdArray = true;
             break;
 
         case '2':
+            if (!createdArray) { printf("Talföljden har inte generetats\n"); break;}
             bubbleSort(arr);
             printArr(arr);
+            sortedArray = true;
             break;
         
         case '3':
+            if (!createdArray) { printf("Talföljden har inte generetats\n"); break;}
+            if (!sortedArray) { printf("Talföljden har inte sorterats\n"); break;}
             arrayInfo(arr);
             break;
 
         case '4':
+            if (!createdArray) { printf("Talföljden har inte generetats\n"); break;}
+            if (!sortedArray) { printf("Talföljden har inte sorterats\n"); break;}
             int guess = 0;
             printf("Nummer: ");
             scanf("%d", &guess);
